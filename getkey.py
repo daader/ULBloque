@@ -1,4 +1,4 @@
-# source : https://code.activestate.com/recipes/134892/
+# source : https://code.activestate.com/recipes/134892/ super mon gar
 import os.path
 
 SEQUENCE_FILE_NAME = "sequence.txt"
