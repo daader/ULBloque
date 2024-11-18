@@ -1,3 +1,6 @@
+from sys import argv
+from getkey import getkey
+
 def get_width(lines) -> int:
     texte = lines[0]
     return len(texte) - 2
@@ -45,7 +48,7 @@ def file_decoder(map) -> tuple:
 
     return width, height, cars, moves
 
-def game_creator(map):
+def parse_game(map):
 
     file_decode = file_decoder(map)
 
@@ -55,7 +58,6 @@ def game_creator(map):
     game['height'] = file_decode[1]
     game['cars'] = file_decode[2]
     game['max_moves'] = file_decode[3]
-    parking_display(game['width'],game['height'])
     return game
 
 def parking_display(width, height):
@@ -64,10 +66,54 @@ def parking_display(width, height):
 
     for i in range(height):
         for i in range(width):
-            display_list.append("\u001b[41m  \u001b[0m")
+            display_list.append("\u001b[40m  \u001b[0m")
         display_list.append('\n')
-    print(display_list)
-    # for element in display_list:
-    #     print(element, end='')
+    return display_list
 
-game_creator(map)
+def car_formatter(car, name):
+
+    car_colors = ["\u001b[41m", "\u001b[42m", "\u001b[43m", "\u001b[44m", "\u001b[45m", "\u001b[46m"]
+    first_car_color = "\u001b[47m"
+
+    if name == 'A':
+        car_format = first_car_color + " " + name + "\u001b[0m"
+    else:
+        order = ord(name) - ord('A')
+        color_code = order % 6
+        car_format = car_colors[color_code] + " " + name + "\u001b[0m" 
+    return car_format
+
+def car_list_inserter(display_list, car, letter, width):
+    x, y = car[0]
+    order = x + y * width + y
+    display_list[order] = car_formatter(car, letter)
+    if car[2] > 1:
+        for i in range(car[2]):
+            if car[1] == 'h':
+                order = x+i + y * width + y
+                display_list[order] = car_formatter(car, letter)
+            else:
+                order = x + (y+i) * width + (y+i)
+                display_list[order] = car_formatter(car, letter)
+
+    return display_list
+
+def get_game_str(game, move):
+
+    height = game['height']
+    width = game['width']
+
+    test_car = [(2,2), 'v', 4]
+    display_list = parking_display(game['height'], game['width'])
+    for i, car in enumerate(game['cars']):
+        letter = chr(65+i)
+        car_list_inserter(display_list, car, letter, game['width'])
+    for element in display_list:
+        print(element, end='')
+
+
+    
+
+
+    
+get_game_str(parse_game(map), 3)
