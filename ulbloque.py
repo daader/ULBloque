@@ -108,9 +108,11 @@ def get_game_str(game, move):
     for i, car in enumerate(game['cars']):
         letter = chr(65+i)
         car_list_inserter(display_list, car, letter, game['width'])
+    game_string = f'move: {move}/{game['max_moves']}\n'
     for element in display_list:
-        print(element, end='')
+        game_string += element
 
+    return game_string
 
     
 
