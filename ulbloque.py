@@ -84,18 +84,18 @@ def car_formatter(car, name):
     return car_format
 
 def car_list_inserter(display_list, car, letter, width):
-    x, y = car[0]
-    order = x + y * width + y
-    display_list[order] = car_formatter(car, letter)
-    if car[2] > 1:
-        for i in range(car[2]):
-            if car[1] == 'h':
-                order = x+i + y * width + y
-                display_list[order] = car_formatter(car, letter)
-            else:
-                order = x + (y+i) * width + (y+i)
-                display_list[order] = car_formatter(car, letter)
-
+    if car[2] != 0:
+        x, y = car[0]
+        order = x + y * width + y
+        display_list[order] = car_formatter(car, letter)
+        if car[2] > 1:
+            for i in range(car[2]):
+                if car[1] == 'h':
+                    order = x+i + y * width + y
+                    display_list[order] = car_formatter(car, letter)
+                else:
+                    order = x + (y+i) * width + (y+i)
+                    display_list[order] = car_formatter(car, letter)
     return display_list
 
 def get_game_str(game, move):
@@ -114,8 +114,52 @@ def get_game_str(game, move):
 
     return game_string
 
-    
+# def car_remover(game: dict , car_index:int ):
+#     game['cars'][car_index] = 0
+#     return game
 
 
-    
-get_game_str(parse_game(map), 3)
+def move_car(game: dict, car_index: int, direction: str):
+        game_backup = game
+
+        if direction == 'DOWN':
+            x, y = game["cars"][car_index][0]
+            game["cars"][car_index][0] = (x, y+1)
+        elif direction == 'UP':
+            x, y = game["cars"][car_index][0]
+            game["cars"][car_index][0] = (x, y-1)
+        elif direction == 'LEFT':
+            x, y = game["cars"][car_index][0]
+            game["cars"][car_index][0] = (x-1, y)
+        elif direction == 'RIGHT':
+            x, y = game["cars"][car_index][0]
+            game["cars"][car_index][0] = (x+1, y)
+        x, y = game["cars"][car_index][0]
+
+        if game["cars"][car_index][1] == 'h':
+            if (game["cars"][car_index][0][0] + game["cars"][car_index][2]) <= game["height"]:
+                return True
+            else:
+                game = game_backup
+                return False
+        else:
+            if (game["cars"][car_index][0][1] + game["cars"][car_index][2]) <= game["width"]:
+                return True
+            else:
+                game = game_backup
+                return False
+            
+# def is_win(game: dict) -> bool:
+
+#     if game["cars"][1]== 'h':
+#         if game["cars"][0][0][1] > (game['width']):
+#             return True
+#         else:
+#             return False
+#     else:
+#         if game["cars"][0][0][0] >= (game['height']):
+#             return True
+#         else:
+#             return False
+
+print(get_game_str(parse_game(map), 3))
