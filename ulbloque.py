@@ -149,17 +149,16 @@ def move_car(game: dict, car_index: int, direction: str):
                 game = game_backup
                 return False
             
-# def is_win(game: dict) -> bool:
+def is_win(game: dict) -> bool:
 
-#     if game["cars"][1]== 'h':
-#         if game["cars"][0][0][1] > (game['width']):
-#             return True
-#         else:
-#             return False
-#     else:
-#         if game["cars"][0][0][0] >= (game['height']):
-#             return True
-#         else:
-#             return False
-
-print(get_game_str(parse_game(map), 3))
+    if game["cars"][1]== 'h':
+        if (game["cars"][0][0][1] + game["cars"][0][2]) == (game['width']):
+            return True
+        else:
+            return False
+    else:
+        if (game["cars"][0][0][0] + game["cars"][0][2]) == (game['height']):
+            return True
+        else:
+            return False
+        
