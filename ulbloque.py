@@ -1,6 +1,10 @@
 from sys import argv
 from getkey import getkey
 
+#############################################
+
+# Ces premires fonctions sont uniquement utilisés par la fonction file_decode
+
 def get_width(lines) -> int:
     texte = lines[0]
     return len(texte) - 2
@@ -35,8 +39,10 @@ def get_cars(lines) -> list:
     cars = [temp_a] + cars
     return cars
 
+#############################################
+
 map = 'game1.txt' # a enlever et remplacer par argv
-def file_decoder(map) -> tuple:
+def file_decoder(map) -> tuple: # Utilisée uniquement par parse_game
     with open(map, 'r') as gamefile: 
 
         lines = [line.strip() for line in gamefile.readlines()]
@@ -48,7 +54,7 @@ def file_decoder(map) -> tuple:
 
     return width, height, cars, moves
 
-def parse_game(map):
+def parse_game(map) -> dict:
 
     file_decode = file_decoder(map)
 
@@ -60,7 +66,7 @@ def parse_game(map):
     game['max_moves'] = file_decode[3]
     return game
 
-def parking_display(width, height):
+def parking_display(width, height) -> list: # Utilisée uniquement par get_game_str
 
     display_list = []
 
@@ -70,7 +76,7 @@ def parking_display(width, height):
         display_list.append('\n')
     return display_list
 
-def car_formatter(car, name):
+def car_formatter(name): # utilisée uniquement par car_list_inserter
 
     car_colors = ["\u001b[41m", "\u001b[42m", "\u001b[43m", "\u001b[44m", "\u001b[45m", "\u001b[46m"]
     first_car_color = "\u001b[47m"
@@ -83,22 +89,22 @@ def car_formatter(car, name):
         car_format = car_colors[color_code] + " " + name + "\u001b[0m" 
     return car_format
 
-def car_list_inserter(display_list, car, letter, width):
+def car_list_inserter(display_list, car, letter, width): # Utilisée uniquement par get_game_str
     if car[2] != 0:
         x, y = car[0]
         order = x + y * width + y
-        display_list[order] = car_formatter(car, letter)
+        display_list[order] = car_formatter(letter)
         if car[2] > 1:
             for i in range(car[2]):
                 if car[1] == 'h':
                     order = x+i + y * width + y
-                    display_list[order] = car_formatter(car, letter)
+                    display_list[order] = car_formatter(letter)
                 else:
                     order = x + (y+i) * width + (y+i)
-                    display_list[order] = car_formatter(car, letter)
+                    display_list[order] = car_formatter(letter)
     return display_list
 
-def get_game_str(game, move):
+def get_game_str(game: dict, move: int) -> str:
 
     height = game['height']
     width = game['width']
@@ -114,12 +120,7 @@ def get_game_str(game, move):
 
     return game_string
 
-# def car_remover(game: dict , car_index:int ):
-#     game['cars'][car_index] = 0
-#     return game
-
-
-def move_car(game: dict, car_index: int, direction: str):
+def move_car(game: dict, car_index: int, direction: str) -> bool:
         game_backup = game
 
         if direction == 'DOWN':
@@ -161,4 +162,7 @@ def is_win(game: dict) -> bool:
             return True
         else:
             return False
-        
+
+def play_game(game: dict) -> int:
+
+    return 
